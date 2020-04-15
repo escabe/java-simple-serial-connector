@@ -46,7 +46,7 @@ JNIEXPORT jlong JNICALL Java_jssc_SerialNativeInterface_openPort(JNIEnv *env, jo
     const char* port = env->GetStringUTFChars(portName, JNI_FALSE);
 
     //since 2.1.0 -> string concat fix
-    char portFullName[strlen(prefix) + strlen(port) + 1];
+    char *portFullName = new char[strlen(prefix) + strlen(port) + 1];
     strcpy(portFullName, prefix);
     strcat(portFullName, port);
     //<- since 2.1.0
@@ -259,7 +259,7 @@ JNIEXPORT jbyteArray JNICALL Java_jssc_SerialNativeInterface_readBytes
     DWORD lpNumberOfBytesTransferred;
     DWORD lpNumberOfBytesRead;
     OVERLAPPED *overlapped = new OVERLAPPED();
-    jbyte lpBuffer[byteCount];
+    jbyte *lpBuffer = new jbyte[byteCount];
     jbyteArray returnArray = env->NewByteArray(byteCount);
     overlapped->hEvent = CreateEventA(NULL, true, false, NULL);
     if(ReadFile(hComm, lpBuffer, (DWORD)byteCount, &lpNumberOfBytesRead, overlapped)){
